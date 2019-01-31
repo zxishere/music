@@ -25,7 +25,7 @@ class CrawlerMoresound extends Command
             // return GetMusic::dispatch($this->option('mid'), $qq)->onQueue('low');
             return $this->get($this->option('mid'), true, $qq, $this->option('force'));
         }
-        $keyword      = $this->argument('keyword');
+        $keyword = trim($this->argument('keyword'));
 
         $data = [
             'p' => 1,
@@ -40,25 +40,23 @@ class CrawlerMoresound extends Command
         $count = 0;
         if (count($result->song_list) > 0) {
             foreach ($result->song_list as $song) {
+                $singers = collect($song->singer)->pluck('name')->implode(',');
                 $count ++;
                 $songData[] = [
                     $count,
                     explode('<sup', $song->songname)[0],
-                    collect($song->singer)->pluck('name')->implode(','),
+                    $singers,
                     $song->albumname,
                     $song->interval,
                     $song->songmid
                 ];
-                $mids[] = $song->songmid;
+                if ($this->option('download') == true && str_contains($singers, $keyword)) {
+                    GetMusic::dispatch($mid, $qq)->onQueue('low');
+                }
             }
         }
         $this->showTable($songData);
-        if ($this->option('download') == true) {
-            foreach ($mids as $mid) {
-                GetMusic::dispatch($mid, $qq)->onQueue('low');
-                // $this->get($mid, true, $qq);
-            }
-        }
+
         for ($i=2; $i<=$pages; $i++) {
             $this->_getList($i, $keyword, $qq);
         }
@@ -77,24 +75,21 @@ class CrawlerMoresound extends Command
         $count = 0;
         if (count($result->song_list) > 0) {
             foreach ($result->song_list as $song) {
+                $singers = collect($song->singer)->pluck('name')->implode(',');
                 $count ++;
                 $songData[] = [
                     $count,
                     explode('<sup', $song->songname)[0],
-                    collect($song->singer)->pluck('name')->implode(','),
+                    $singers,
                     $song->albumname,
                     $song->interval,
                     $song->songmid
                 ];
-                $mids[] = $song->songmid;
+                if ($this->option('download') == true && str_contains($singers, $keyword)) {
+                    GetMusic::dispatch($mid, $qq)->onQueue('low');
+                }
             }
         }
         $this->showTable($songData);
-        if ($this->option('download') == true) {
-            foreach ($mids as $mid) {
-                GetMusic::dispatch($mid, $qq)->onQueue('low');
-                // $this->get($mid, true, $qq);
-            }
-        }
     }
 }
