@@ -57,9 +57,9 @@ class CrawlerMoresound extends Command
         }
         $this->showTable($songData);
 
-        for ($i=2; $i<=$pages; $i++) {
-            $this->_getList($i, $keyword, $qq);
-        }
+        // for ($i=2; $i<=$pages; $i++) {
+        //     $this->_getList($i, $keyword, $qq);
+        // }
     }
 
     private function _getList($page, $keyword, $qq)
