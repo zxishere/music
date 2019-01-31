@@ -2,13 +2,9 @@
 
 namespace App\Console\Commands;
 
-use GuzzleHttp\Pool;
 use App\Jobs\GetMusic;
-use GuzzleHttp\Client;
 use App\Traits\Moresound;
-use GuzzleHttp\Psr7\Request;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 
 class CrawlerMoresound extends Command
 {
@@ -30,7 +26,6 @@ class CrawlerMoresound extends Command
             // return $this->get($this->option('mid'), true, $qq, $this->option('force'));
         }
         $keyword      = $this->argument('keyword');
-        $needDownload = $this->option('download');
 
         $data = [
             'p' => 1,
@@ -40,6 +35,7 @@ class CrawlerMoresound extends Command
 
         $result = $this->post($data, 'search=qq');
         $this->output->writeln('total '.$result->totalnum);
+        $pages = ceil($result->totalnum/50);
         $songData = $mids = [];
         $count = 0;
         if (count($result->song_list) > 0) {
@@ -57,7 +53,43 @@ class CrawlerMoresound extends Command
             }
         }
         $this->showTable($songData);
-        if ($needDownload == true) {
+        if ($this->option('download') == true) {
+            foreach ($mids as $mid) {
+                $this->get($mid, true, $qq);
+            }
+        }
+        for ($i=2; $i<=$pages; $i++) {
+            $this->_getList($i, $keyword);
+        }
+    }
+
+    private function _getList($page, $keyword)
+    {
+        $data = [
+            'p' => $page,
+            'w' => $keyword,
+            'n' => 50
+        ];
+
+        $result = $this->post($data, 'search=qq');
+        $songData = $mids = [];
+        $count = 0;
+        if (count($result->song_list) > 0) {
+            foreach ($result->song_list as $song) {
+                $count ++;
+                $songData[] = [
+                    $count,
+                    explode('<sup', $song->songname)[0],
+                    collect($song->singer)->pluck('name')->implode(','),
+                    $song->albumname,
+                    $song->interval,
+                    $song->songmid
+                ];
+                $mids[] = $song->songmid;
+            }
+        }
+        $this->showTable($songData);
+        if ($this->option('download') == true) {
             foreach ($mids as $mid) {
                 $this->get($mid, true, $qq);
             }

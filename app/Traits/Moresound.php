@@ -59,7 +59,6 @@ trait Moresound
             $client = new Client($this->config());
             $response = $client->get('/music/'.$url);
             $download = json_decode($response->getBody()->getContents());
-            dump($download);
             if (isset($download->url)) {
                 $result->song  = str_replace('/', ' & ', $result->song);
                 $result->album = str_replace('/', ' & ', $result->album);
