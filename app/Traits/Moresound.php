@@ -42,7 +42,7 @@ trait Moresound
         return json_decode($response->getBody()->getContents());
     }
 
-    public function get($mid, $showprogress, $qq, $force = false)
+    public function get($mid, $showprogress, $qq, $keyword = '')
     {
         $result = $this->post(['mid' => $mid], 'get_song=qq');
         $urls = (array)$result->url;
@@ -67,7 +67,7 @@ trait Moresound
                 } else {
                     if (str_contains($result->singer, '/')) {
                         $result->singer = str_replace('/', ' & ', $result->singer);
-                        $directory = $result->album;
+                        $directory = $keyword .' - '. $result->album;
                     }
                     if ($result->album == '' || $result->album == '空') {
                         $directory = $result->singer;

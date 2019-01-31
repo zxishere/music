@@ -10,7 +10,7 @@ class CrawlerMoresound extends Command
 {
     use Moresound;
 
-    protected $signature = 'crawler:moresound {keyword?} {--D|download} {--F|force} {--Q|qq=miao} {--M|mid=}';
+    protected $signature = 'crawler:moresound {keyword?} {--D|download} {--Q|qq=miao} {--M|mid=}';
     protected $description = 'Crawler Moresound';
 
     public function __construct()
@@ -23,7 +23,7 @@ class CrawlerMoresound extends Command
         $qq = $this->option('qq');
         if ($this->option('mid') !== null) {
             // return GetMusic::dispatch($this->option('mid'), $qq)->onQueue('low');
-            return $this->get($this->option('mid'), true, $qq, $this->option('force'));
+            return $this->get($this->option('mid'), true, $qq);
         }
         $keyword = trim($this->argument('keyword'));
 
@@ -51,7 +51,7 @@ class CrawlerMoresound extends Command
                     $song->songmid
                 ];
                 if ($this->option('download') == true && str_contains($singers, $keyword)) {
-                    GetMusic::dispatch($song->songmid, $qq)->onQueue('low');
+                    GetMusic::dispatch($song->songmid, $qq, $keyword)->onQueue('low');
                 }
             }
         }
@@ -86,7 +86,7 @@ class CrawlerMoresound extends Command
                     $song->songmid
                 ];
                 if ($this->option('download') == true && str_contains($singers, $keyword)) {
-                    GetMusic::dispatch($song->songmid, $qq)->onQueue('low');
+                    GetMusic::dispatch($song->songmid, $qq, $keyword)->onQueue('low');
                 }
             }
         }

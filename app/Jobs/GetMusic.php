@@ -17,16 +17,18 @@ class GetMusic implements ShouldQueue
 
     protected $mid;
     protected $qq;
+    protected $keyword;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($mid, $qq)
+    public function __construct($mid, $qq, $keyword)
     {
-        $this->mid = $mid;
-        $this->qq  = $qq;
+        $this->mid     = $mid;
+        $this->qq      = $qq;
+        $this->keyword = $keyword;
     }
 
     public function tags()
@@ -41,7 +43,7 @@ class GetMusic implements ShouldQueue
      */
     public function handle()
     {
-        $this->get($this->mid, false, $this->qq);
+        $this->get($this->mid, false, $this->qq, $this->keyword);
         return ;
     }
 }
