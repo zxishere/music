@@ -60,11 +60,11 @@ class CrawlerMoresound extends Command
             }
         }
         for ($i=2; $i<=$pages; $i++) {
-            $this->_getList($i, $keyword);
+            $this->_getList($i, $keyword, $qq);
         }
     }
 
-    private function _getList($page, $keyword)
+    private function _getList($page, $keyword, $qq)
     {
         $data = [
             'p' => $page,
