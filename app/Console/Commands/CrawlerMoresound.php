@@ -51,7 +51,7 @@ class CrawlerMoresound extends Command
                     $song->songmid
                 ];
                 if ($this->option('download') == true && str_contains($singers, $keyword)) {
-                    GetMusic::dispatch($mid, $qq)->onQueue('low');
+                    GetMusic::dispatch($song->songmid, $qq)->onQueue('low');
                 }
             }
         }
@@ -86,7 +86,7 @@ class CrawlerMoresound extends Command
                     $song->songmid
                 ];
                 if ($this->option('download') == true && str_contains($singers, $keyword)) {
-                    GetMusic::dispatch($mid, $qq)->onQueue('low');
+                    GetMusic::dispatch($song->songmid, $qq)->onQueue('low');
                 }
             }
         }
