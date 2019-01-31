@@ -77,7 +77,7 @@ trait Moresound
                     $mp3 = $this->download($download->url, $qq.'/'.$directory, $result->singer .' - '. $result->song.'.'.$download->suffix, $showprogress);
                     $cover = $this->download($urls['专辑封面'], $qq.'/'.$directory, 'cover.jpg', $showprogress);
                     if (isset($urls['lrc'])) {
-                        $this->download('/music/'.$urls['lrc'], $qq.'/'.$directory, $result->singer .' - '. $result->song.'.lrc', $showprogress, $this->config(), 'webdav');
+                        $this->download('/music/'.$urls['lrc'], $qq.'/'.$directory, $result->singer .' - '. $result->song.'.lrc', $showprogress, $this->config());
                     }
                 } catch (\Exception $e) {
                     $this->output->writeln('Downloading Error: '. $e->getMessage());
