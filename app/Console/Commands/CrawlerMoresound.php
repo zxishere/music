@@ -22,8 +22,8 @@ class CrawlerMoresound extends Command
     {
         $qq = $this->option('qq');
         if ($this->option('mid') !== null) {
-            return GetMusic::dispatch($this->option('mid'), $qq)->onQueue('low');
-            // return $this->get($this->option('mid'), true, $qq, $this->option('force'));
+            // return GetMusic::dispatch($this->option('mid'), $qq)->onQueue('low');
+            return $this->get($this->option('mid'), true, $qq, $this->option('force'));
         }
         $keyword      = $this->argument('keyword');
 
@@ -55,7 +55,8 @@ class CrawlerMoresound extends Command
         $this->showTable($songData);
         if ($this->option('download') == true) {
             foreach ($mids as $mid) {
-                $this->get($mid, true, $qq);
+                GetMusic::dispatch($mid, $qq)->onQueue('low');
+                // $this->get($mid, true, $qq);
             }
         }
         for ($i=2; $i<=$pages; $i++) {
@@ -91,7 +92,8 @@ class CrawlerMoresound extends Command
         $this->showTable($songData);
         if ($this->option('download') == true) {
             foreach ($mids as $mid) {
-                $this->get($mid, true, $qq);
+                GetMusic::dispatch($mid, $qq)->onQueue('low');
+                // $this->get($mid, true, $qq);
             }
         }
     }
