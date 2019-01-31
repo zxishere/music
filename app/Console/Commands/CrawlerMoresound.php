@@ -69,7 +69,7 @@ class CrawlerMoresound extends Command
             'w' => $keyword,
             'n' => 50
         ];
-
+        $this->output->writeln('page '.$page);
         $result = $this->post($data, 'search=qq');
         $songData = $mids = [];
         $count = 0;
