@@ -58,18 +58,18 @@ class CrawlerMoresound extends Command
         $this->showTable($songData);
 
         for ($i=2; $i<=$pages; $i++) {
-            $this->_getList($i, $keyword, $qq);
+            $this->_getList($i, $keyword, $qq, $pages);
         }
     }
 
-    private function _getList($page, $keyword, $qq)
+    private function _getList($page, $keyword, $qq, $pages)
     {
         $data = [
             'p' => $page,
             'w' => $keyword,
             'n' => 50
         ];
-        $this->output->writeln('page '.$page);
+        $this->output->writeln('page '.$page.' / '.$pages);
         $result = $this->post($data, 'search=qq');
         $songData = $mids = [];
         $count = 0;
