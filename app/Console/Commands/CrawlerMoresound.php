@@ -22,7 +22,7 @@ class CrawlerMoresound extends Command
     {
         $qq = $this->option('qq');
         if ($this->option('mid') !== null) {
-            return GetMusic::dispatch($this->option('mid'), $qq, $keyword)->onQueue('low');
+            return GetMusic::dispatch($this->option('mid'), $qq, '')->onQueue('low');
             // return $this->get($this->option('mid'), true, $qq);
         }
         $keyword = trim($this->argument('keyword'));
