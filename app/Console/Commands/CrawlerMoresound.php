@@ -26,7 +26,18 @@ class CrawlerMoresound extends Command
             // return $this->get($this->option('mid'), true, $qq);
         }
         $keyword = trim($this->argument('keyword'));
+        if (str_contains($keyword, ',')) {
+            $keywords = explode(',', $keyword);
+            foreach ($keywords as $value) {
+                $this->_getKeyWord($qq, $value);
+            }
+        } else {
+            $this->_getKeyWord($qq, $keyword);
+        }
+    }
 
+    private function _getKeyWord($qq, $keyword)
+    {
         $data = [
             'p' => 1,
             'w' => $keyword,
