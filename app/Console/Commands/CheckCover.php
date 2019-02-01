@@ -41,17 +41,21 @@ class CheckCover extends Command
                 ]);
                 foreach ($files as $mp3) {
                     if (substr(strrchr($mp3, '.'), 1) == 'mp3') {
-                        $newName = str_replace('.mp3', '_coverd.mp3', $mp3);
-                        $ffmpeg = FFMpeg::create();
-                        if ($ffprobe->format($directory.$mp3)->get('nb_streams') == 1) {
-                            $audio = $ffmpeg->open($directory.$mp3);
-                            $audio->filters()->addMetadata(["artwork" => $cover]);
-                            $audio->save(new \FFMpeg\Format\Audio\Mp3(), $directory.$newName);
-                            Storage::disk('music')->delete($qq.'/'.$key.'/'.$mp3);
-                            Storage::disk('music')->move($qq.'/'.$key.'/'.$newName, $qq.'/'.$key.'/'.$mp3);
-                            $this->output->writeln("<info>Ser cover complete : ".$mp3."</info>");
-                        } else {
-                            $this->output->writeln("<info>Cover exist : ".$mp3."</info>");
+                        try {
+                            $newName = str_replace('.mp3', '_coverd.mp3', $mp3);
+                            if ($ffprobe->format($directory.$mp3)->get('nb_streams') == 1) {
+                                $ffmpeg = FFMpeg::create();
+                                $audio = $ffmpeg->open($directory.$mp3);
+                                $audio->filters()->addMetadata(["artwork" => $cover]);
+                                $audio->save(new \FFMpeg\Format\Audio\Mp3(), $directory.$newName);
+                                Storage::disk('music')->delete($qq.'/'.$key.'/'.$mp3);
+                                Storage::disk('music')->move($qq.'/'.$key.'/'.$newName, $qq.'/'.$key.'/'.$mp3);
+                                $this->output->writeln("<info>Ser cover complete : ".$mp3."</info>");
+                            } else {
+                                $this->output->writeln("<info>Cover exist : ".$mp3."</info>");
+                            }
+                        } catch (\Exception $e) {
+                            $this->output->writeln('<error>Ser Cover Error: '. $e->getMessage().'</error>');
                         }
                     }
                 }
